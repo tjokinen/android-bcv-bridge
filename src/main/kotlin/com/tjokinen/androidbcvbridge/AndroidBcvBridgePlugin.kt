@@ -3,7 +3,6 @@ package com.tjokinen.androidbcvbridge
 import kotlinx.validation.KotlinApiBuildTask
 import kotlinx.validation.KotlinApiCompareTask
 import org.gradle.api.Action
-import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -75,16 +74,11 @@ class AndroidBcvBridgePlugin : Plugin<Project> {
         }
 
         // 3. Dump = copy the freshly built API over the committed file (BCV's `apiDump` analogue).
-        project.tasks.register<DefaultTask>("${variant}ApiDump") {
+        project.tasks.register<ApiDumpTask>("${variant}ApiDump") {
             group = "verification"
-            description = "Updates the committed API dump (${ext.apiFile.get().asFile.name})."
-            dependsOn(apiBuild)
-            doLast {
-                val generated = apiBuild.get().outputApiFile.get().asFile
-                val committed = ext.apiFile.get().asFile
-                committed.parentFile?.mkdirs()
-                generated.copyTo(committed, overwrite = true)
-            }
+            description = "Updates the committed BCV API dump."
+            generatedApiFile.set(apiBuild.flatMap { it.outputApiFile })
+            committedApiFile.set(ext.apiFile)
         }
 
         // Gate the build on the API check.

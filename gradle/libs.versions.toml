@@ -3,9 +3,14 @@
 # are not public API and can change between BCV releases. This is the version it's tested against.
 bcv = "0.17.0"
 kotlinMetadata = "2.1.0"
+asm = "9.7"
 
 [libraries]
 # Bundled so consumers get BCV's task types without applying the BCV plugin themselves.
 bcv = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "bcv" }
 # BCV reads @Metadata from .class files to determine Kotlin visibility; needed at runtime.
 kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlinMetadata" }
+# BCV's API build worker needs ASM (ClassNode) at runtime, but its POM doesn't declare it;
+# provide it so the plugin is self-sufficient rather than relying on AGP to leak it onto the classpath.
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
