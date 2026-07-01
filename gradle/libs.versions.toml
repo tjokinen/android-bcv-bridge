@@ -1,0 +1,11 @@
+[versions]
+# Pinned: the bridge wires BCV's INTERNAL task types (KotlinApiBuildTask/CompareTask), which
+# are not public API and can change between BCV releases. This is the version it's tested against.
+bcv = "0.17.0"
+kotlinMetadata = "2.1.0"
+
+[libraries]
+# Bundled so consumers get BCV's task types without applying the BCV plugin themselves.
+bcv = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "bcv" }
+# BCV reads @Metadata from .class files to determine Kotlin visibility; needed at runtime.
+kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlinMetadata" }
