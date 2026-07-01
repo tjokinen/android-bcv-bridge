@@ -1,4 +1,4 @@
-package com.tjokinen.androidbcvbridge
+package io.github.tjokinen.androidbcvbridge
 
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property

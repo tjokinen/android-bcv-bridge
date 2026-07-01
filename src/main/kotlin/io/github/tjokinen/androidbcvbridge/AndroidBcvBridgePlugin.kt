@@ -1,4 +1,4 @@
-package com.tjokinen.androidbcvbridge
+package io.github.tjokinen.androidbcvbridge
 
 import kotlinx.validation.KotlinApiBuildTask
 import kotlinx.validation.KotlinApiCompareTask
@@ -21,7 +21,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  * registers BCV's own task types directly, fed by the module's compiled classes.
  *
  * Approach: feed BCV's [KotlinApiBuildTask] the outputs of the variant's `compile<Variant>Kotlin`
- * and `compile<Variant>JavaWithJavac` tasks (the okhttp#9375 style). Simpler and fewer moving
+ * and `compile<Variant>JavaWithJavac` tasks. Simpler and fewer moving
  * parts than AGP's `ScopedArtifacts` API; the only assumption is AGP's stable compile-task
  * naming convention.
  *
@@ -31,7 +31,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  *
  * Caveat: `KotlinApiBuildTask`/`KotlinApiCompareTask` are BCV-internal types, not public API,
  * so this is pinned to a tested BCV version and is a stopgap until Android support lands in
- * KGP's built-in ABI validation (KT-71172).
+ * KGP's built-in ABI validation (KT-78025; stabilization umbrella KT-71172).
  */
 class AndroidBcvBridgePlugin : Plugin<Project> {
 

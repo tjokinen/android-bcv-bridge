@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Action major tags drift — verify these at setup time (SHA-pinning is even safer).
+jobs:
+  wrapper-validation:
+    name: Validate Gradle wrapper
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: gradle/actions/wrapper-validation@v6
+
+  build:
+    name: Build & functional test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      # Installs Android cmdline-tools and accepts SDK licenses so the functional test's
+      # AGP build can auto-download the platform/build-tools it needs.
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Build + test
+        run: ./gradlew build --stacktrace

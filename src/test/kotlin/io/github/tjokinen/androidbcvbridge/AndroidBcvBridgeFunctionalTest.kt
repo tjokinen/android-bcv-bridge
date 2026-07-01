@@ -1,4 +1,4 @@
-package com.tjokinen.androidbcvbridge
+package io.github.tjokinen.androidbcvbridge
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -46,7 +46,7 @@ class AndroidBcvBridgeFunctionalTest {
             """
             plugins {
                 id("com.android.library") version "9.2.0"
-                id("com.tjokinen.android-bcv-bridge")
+                id("io.github.tjokinen.android-bcv-bridge")
             }
             android {
                 namespace = "com.example.samplelib"

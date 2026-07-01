@@ -1,9 +1,10 @@
 plugins {
     `kotlin-dsl`
     `maven-publish`
+    alias(libs.plugins.plugin.publish)
 }
 
-group = "com.github.tomijokinen"
+group = "io.github.tjokinen"
 version = "0.1.0"
 
 dependencies {
@@ -30,15 +31,18 @@ java {
 }
 
 gradlePlugin {
+    website = "https://github.com/tjokinen/android-bcv-bridge"
+    vcsUrl = "https://github.com/tjokinen/android-bcv-bridge"
     plugins {
         create("androidBcvBridge") {
-            id = "com.tjokinen.android-bcv-bridge"
-            implementationClass = "com.tjokinen.androidbcvbridge.AndroidBcvBridgePlugin"
+            id = "io.github.tjokinen.android-bcv-bridge"
+            implementationClass = "io.github.tjokinen.androidbcvbridge.AndroidBcvBridgePlugin"
             displayName = "Android BCV Bridge"
             description =
                 "Wires Kotlin Binary Compatibility Validator API dump/check tasks for Android " +
                 "library modules built with AGP built-in Kotlin, where BCV does not register its " +
                 "own tasks (see Kotlin/binary-compatibility-validator#312)."
+            tags = listOf("android", "kotlin", "binary-compatibility", "abi", "agp", "api")
         }
     }
 }
