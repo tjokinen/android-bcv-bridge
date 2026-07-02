@@ -10,10 +10,10 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.work.DisableCachingByDefault
 
 /**
- * Copies a freshly built BCV API dump over the committed file (BCV's `apiDump` analogue).
+ * Copies a freshly built BCV API dump over the committed file, mirroring BCV's own `apiDump`.
  *
- * Declares its input/output as managed properties so it is configuration-cache safe: the action
- * touches only `this`'s properties, never the project or extension.
+ * Input and output are managed properties so the task stays configuration-cache safe. The
+ * action reads its own properties only and never touches the project or the extension.
  */
 @DisableCachingByDefault(because = "Trivial copy of the generated dump over the committed file")
 abstract class ApiDumpTask : DefaultTask() {

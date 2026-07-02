@@ -10,11 +10,12 @@ import org.junit.rules.TemporaryFolder
 import java.io.File
 
 /**
- * End-to-end test: applies the plugin to a real `com.android.library` project (AGP built-in
- * Kotlin, no standalone Kotlin plugin) and drives the generated tasks. Runs with the
- * configuration cache ON, which also verifies ApiDumpTask is CC-safe.
+ * End-to-end test that applies the plugin to a real `com.android.library` project using AGP
+ * built-in Kotlin, with no standalone Kotlin plugin, and drives the generated tasks. It runs
+ * with the configuration cache enabled, which also verifies that [ApiDumpTask] is
+ * configuration-cache safe.
  *
- * Requires an Android SDK (ANDROID_HOME) and downloads AGP, so it's a slow integration test.
+ * Requires an Android SDK (ANDROID_HOME) and downloads AGP, so it is a slow integration test.
  */
 class AndroidBcvBridgeFunctionalTest {
 

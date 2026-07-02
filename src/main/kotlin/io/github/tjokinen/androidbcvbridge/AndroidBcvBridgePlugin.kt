@@ -11,27 +11,26 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 /**
- * Wires Kotlin Binary Compatibility Validator (BCV) API dump/check tasks for Android library
- * modules built with AGP's built-in Kotlin.
+ * Registers Kotlin Binary Compatibility Validator (BCV) API dump and check tasks for Android
+ * library modules built with AGP's built-in Kotlin.
  *
- * Why this exists: BCV only registers its `apiDump`/`apiCheck` tasks when the standalone
- * `kotlin-android` (or `kotlin`/`kotlin-multiplatform`) plugin is applied. Under AGP 9
- * built-in Kotlin that plugin is not applied, so BCV silently does nothing
- * (Kotlin/binary-compatibility-validator#312). This plugin keeps built-in Kotlin and instead
- * registers BCV's own task types directly, fed by the module's compiled classes.
+ * BCV only creates its `apiDump` and `apiCheck` tasks when the standalone `kotlin-android`,
+ * `kotlin` or `kotlin-multiplatform` plugin is applied. Under AGP 9 built-in Kotlin none of
+ * those is applied, so BCV silently does nothing. See
+ * Kotlin/binary-compatibility-validator#312. This plugin keeps built-in Kotlin and registers
+ * BCV's own task types directly, fed by the module's compiled classes.
  *
- * Approach: feed BCV's [KotlinApiBuildTask] the outputs of the variant's `compile<Variant>Kotlin`
- * and `compile<Variant>JavaWithJavac` tasks. Simpler and fewer moving
- * parts than AGP's `ScopedArtifacts` API; the only assumption is AGP's stable compile-task
- * naming convention.
+ * It feeds [KotlinApiBuildTask] the outputs of the variant's `compile<Variant>Kotlin` and
+ * `compile<Variant>JavaWithJavac` tasks. That is simpler than going through AGP's
+ * `ScopedArtifacts` API, and the only assumption it makes is AGP's stable compile-task naming.
  *
- * Tasks created (for the configured variant, default `release`):
- *  - `<variant>ApiDump`  — writes/updates the committed `api/<module>.api`
- *  - `<variant>ApiCheck` — verifies the compiled API against it; wired into `check`
+ * For the configured variant (default `release`) it creates `<variant>ApiDump`, which writes
+ * the committed `api/<module>.api`, and `<variant>ApiCheck`, which verifies the compiled API
+ * against that file and is wired into `check`.
  *
- * Caveat: `KotlinApiBuildTask`/`KotlinApiCompareTask` are BCV-internal types, not public API,
- * so this is pinned to a tested BCV version and is a stopgap until Android support lands in
- * KGP's built-in ABI validation (KT-78025; stabilization umbrella KT-71172).
+ * Note that [KotlinApiBuildTask] and [KotlinApiCompareTask] are BCV-internal types rather than
+ * public API, so this plugin is pinned to a tested BCV version. It is a stopgap until Android
+ * support lands in KGP's built-in ABI validation, tracked in KT-78025.
  */
 class AndroidBcvBridgePlugin : Plugin<Project> {
 
@@ -73,7 +72,7 @@ class AndroidBcvBridgePlugin : Plugin<Project> {
             generatedApiFile.set(apiBuild.flatMap { it.outputApiFile })
         }
 
-        // 3. Dump = copy the freshly built API over the committed file (BCV's `apiDump` analogue).
+        // 3. Copy the freshly built API over the committed file, like BCV's own apiDump.
         project.tasks.register<ApiDumpTask>("${variant}ApiDump") {
             group = "verification"
             description = "Updates the committed BCV API dump."
