@@ -1,7 +1,7 @@
 [versions]
 # Pinned: the bridge wires BCV's INTERNAL task types (KotlinApiBuildTask/CompareTask), which
 # are not public API and can change between BCV releases. This is the version it's tested against.
-bcv = "0.17.0"
+bcv = "0.18.1"
 kotlinMetadata = "2.1.0"
 asm = "9.7"
 pluginPublish = "2.1.1"
