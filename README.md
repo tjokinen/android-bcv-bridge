@@ -116,12 +116,19 @@ AGP KMP library plugin. No `abiValidation` DSL needed.
 - With classic KMP (`com.android.library` + `kotlin("multiplatform")` + `androidTarget()`) the
   plugin deliberately does nothing: there the android compilations are named per variant and
   BCV's own multiplatform support handles them.
-- This plugin becomes unnecessary once Android Gradle projects are
-  supported in the Kotlin Gradle plugin's built-in ABI validation, tracked in
-  [KT-78025](https://youtrack.jetbrains.com/issue/KT-78025) (open and unscheduled at the time
-  of writing) under the broader stabilization umbrella
-  [KT-71172](https://youtrack.jetbrains.com/issue/KT-71172). Watch KT-78025 to know when to
-  retire this plugin.
+- This plugin becomes unnecessary once Android Gradle projects are supported in the Kotlin
+  Gradle plugin's built-in ABI validation, and its two paths retire on different timelines:
+  - The KMP path: KGP's built-in `abiValidation` supports
+    `com.android.kotlin.multiplatform.library` from Kotlin 2.4.20
+    ([KT-85950](https://youtrack.jetbrains.com/issue/KT-85950), fixed in 2.4.20-Beta2). Once
+    on 2.4.20+, KMP projects can migrate from the BCV plugin to KGP's built-in validation and
+    drop this bridge. The BCV plugin itself is not getting the fix; the gap is also reported
+    as [Kotlin/binary-compatibility-validator#315](https://github.com/Kotlin/binary-compatibility-validator/issues/315).
+  - The `com.android.library` built-in Kotlin path: still unsupported upstream, tracked in
+    [KT-78025](https://youtrack.jetbrains.com/issue/KT-78025) (open and unscheduled at the
+    time of writing) under the broader stabilization umbrella
+    [KT-71172](https://youtrack.jetbrains.com/issue/KT-71172). Watch KT-78025 to know when to
+    retire this path.
 - Relies on task naming. It uses AGP's stable `compile<Variant>Kotlin` and
   `compile<Variant>JavaWithJavac` task names rather than AGP's `ScopedArtifacts` API. Simpler
   and fewer moving parts; the sturdier ScopedArtifacts wiring is a possible future enhancement.
