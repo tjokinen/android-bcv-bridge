@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.tjokinen"
-version = "0.1.0"
+version = "0.2.0"
 
 dependencies {
     // BCV's task types, bundled so consumers don't apply the BCV plugin themselves.
@@ -20,8 +20,26 @@ dependencies {
     testImplementation(gradleTestKit())
 }
 
+// The KMP functional test consumes the plugin by id/version from a local repo, like a real
+// build would, so that it shares one classpath scope with the BCV and Kotlin plugins.
+// TestKit's withPluginClasspath() isolation would hide KGP's classes from the BCV plugin.
+publishing {
+    repositories {
+        maven {
+            name = "functionalTest"
+            url = uri(layout.buildDirectory.dir("functional-test-repo"))
+        }
+    }
+}
+
 tasks.named<Test>("test") {
     useJUnit()
+    dependsOn("publishAllPublicationsToFunctionalTestRepository")
+    systemProperty(
+        "functionalTestRepo",
+        layout.buildDirectory.dir("functional-test-repo").get().asFile.absolutePath,
+    )
+    systemProperty("pluginVersion", version.toString())
     // The functional test runs a full AGP build; give it room and the SDK location.
     System.getenv("ANDROID_HOME")?.let { environment("ANDROID_HOME", it) }
 }
